@@ -1,0 +1,3 @@
+name: circle
+data_params: 
+  n_pairs: 100

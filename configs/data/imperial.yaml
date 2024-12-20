@@ -1,0 +1,9 @@
+name: real
+data_params: 
+  cohort: eee
+  fn_name: read_both_2022
+  f: raw_data/Exam_results_PDF_2022.pdf
+  pages: ['33', '34', '35', '36', '37', '38']
+save_path: processed_data/
+c_thresh: 0.5
+denom: 5

@@ -1,0 +1,14 @@
+name: vns
+params:
+  min_group_size: 2
+  max_group_size: 2
+  balance: 0.9
+  seed: 1
+  maximize: True
+  pvns: [0.5, 0.5]
+  space_n_sample: 100
+  max_optim_steps: 100
+  max_local_search_tries: 20
+  max_no_improve: 10
+  size_reg_weight: 1.0
+  balance_reg_weight: 1.0

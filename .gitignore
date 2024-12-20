@@ -1,0 +1,15 @@
+# Data folders
+raw_data/
+processed_data/
+
+# Output folders
+outputs/
+multirun/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/

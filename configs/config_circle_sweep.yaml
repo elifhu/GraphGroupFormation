@@ -1,0 +1,28 @@
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: n_pairs_${data.data_params.n_pairs}/balance_${optim.params.balance}/maximize_${optim.params.maximize}/seed_${optim.params.seed}
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    sampler:
+      _target_: optuna.samplers.GridSampler
+    storage: null
+    direction: maximize  # or maximize depending on your objective
+    study_name: GroupMatching  # you can change this name
+    n_jobs: 10  # adjust based on your available resources
+    n_trials: 3000  # this should be total number of combinations
+    params:
+      data.data_params.n_pairs: range(2, 100, 4)
+      optim.params.seed: range(1, 11)
+      optim.params.balance: choice(0.0, 0.99)
+      optim.params.maximize: choice("True", "False", "None")
+      
+defaults:
+  - _self_
+  - data: circle
+  - optim: vns
+  - override hydra/sweeper: optuna
+  - override /hydra/sweeper/sampler: grid
+  - override hydra/launcher: joblib

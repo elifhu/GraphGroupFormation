@@ -1,0 +1,7 @@
+name: optimal
+params:
+  min_group_size: 2
+  max_group_size: 2
+  balance: 0.0
+  seed: 1
+  maximize: True
