@@ -1,8 +1,8 @@
 name: vns
 params:
-  min_group_size: 2
-  max_group_size: 2
-  balance: 0.9
+  min_group_size: 4
+  max_group_size: 4
+  balance: null
   seed: 1
   maximize: True
   pvns: [0.5, 0.5]

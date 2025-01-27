@@ -1,0 +1,14 @@
+name: simulated
+data_params:
+  num_students: 240
+  num_courses: 24
+  num_affinities: 4
+  affinity_mark: 80
+  non_affinity_mark: 60
+  affinity_mark_range: 5
+  corr_range: 0.05
+  high_corr: 0.8
+  low_corr: 0.2
+c_thresh: 0.0
+denom: 1
+save_path: processed_data/

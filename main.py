@@ -5,7 +5,7 @@ import pandas as pd
 
 from omegaconf import DictConfig, OmegaConf
 from hydra.core.hydra_config import HydraConfig
-from src.data.data_loader import RealStudentLoader, CircleStudentLoader
+from src.data.data_loader import RealStudentLoader, CircleStudentLoader, SimulatedStudentLoader
 from src.heuristic.vns import VNSGroupOptimizer, ExactOptimizer
 from src.analysis.stats import print_grouping_stats
 from src.utils.save import save_run_data
@@ -51,6 +51,8 @@ def get_data_loader(config):
         return RealStudentLoader(config['data'])
     elif config['data']['name'] == 'circle':
         return CircleStudentLoader(config['data'])
+    elif config['data']['name'] == 'simulated':
+        return SimulatedStudentLoader(config['data'])
     else:
         raise NotImplementedError('Data loader not implemented.')
 

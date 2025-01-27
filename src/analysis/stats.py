@@ -148,6 +148,9 @@ def print_grouping_stats(best_groups, best_cost, data, config, save_path):
     stats_df = pd.DataFrame(stats_dict)
     
     # Add run configuration information
+    if config['optim']['params']['balance'] is None:
+        config['optim']['params']['balance'] = 0.0
+
     config_info = pd.DataFrame({
         'metric': ['maximize', 'min_group_size', 'max_group_size', 'balance'],
         'value': [config['optim']['params']['maximize'],

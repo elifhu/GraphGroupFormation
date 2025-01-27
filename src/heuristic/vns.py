@@ -42,27 +42,34 @@ class GroupOptimizer:
 
     def check_constraints(self, min_group_size, max_group_size, balance):
         assert min_group_size <= max_group_size, 'min_group_size must be less than or equal to max_group_size'
-        assert balance < 1, 'balance must be less than 1'
-        assert balance >= 0, 'balance must be greater than 0'
+        if balance is not None:
+            assert balance < 1, 'balance must be less than 1'
+            assert balance >= 0, 'balance must be greater than 0'
+            self.use_balance = True
+        else:
+            self.use_balance = False
     
     def base_objective(self, solution):
         return np.sum(solution.flatten() * self.d)
     
     def evaluate_solution(self, solution):
         base_obj = self.base_objective(solution)
-        return base_obj - \
-            self.balance_reg_weight * self._balance_l2_penalty(solution) - \
-                self.size_reg_weight * self._size_l2_penalty(solution)
+        balance_penalty = 0.0 if not self.use_balance else self.balance_reg_weight * self._balance_l2_penalty(solution)
+        size_penalty = self.size_reg_weight * self._size_l2_penalty(solution)
+        if self.maximize:
+            return base_obj - balance_penalty - size_penalty
+        return base_obj + balance_penalty + size_penalty
         
     def check_feasibility(self, solution):
         size_feasible = self._check_sizes(solution)
         if not size_feasible:
             return False
-            
-        balance_feasible = self._check_balance(solution)
-        if not balance_feasible:
-            return False
-            
+        
+        if self.use_balance:
+            balance_feasible = self._check_balance(solution)
+            if not balance_feasible:
+                return False
+                
         triangle_feasible = self._check_triangle(solution)
         if not triangle_feasible:
             return False
