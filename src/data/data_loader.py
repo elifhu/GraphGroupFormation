@@ -68,7 +68,7 @@ class RealStudentLoader:
         s = np.zeros((N, 1)).astype(int)
         s[::2] = 1
         s = s.flatten()[:, None]
-        
+
         return {
             'q': q,
             's': s,

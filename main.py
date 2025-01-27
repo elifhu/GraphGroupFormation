@@ -60,14 +60,14 @@ def main(cfg: DictConfig) -> None:
     hydra_cfg = HydraConfig.get()
     save_path = hydra_cfg.runtime.output_dir
 
-    if type(cfg.optim.params.maximize) == str:
-        maximize_str = cfg.optim.params.maximize
-        cfg.optim.params.maximize = True if maximize_str == 'True' else False if maximize_str == 'False' else None
-
-    if type(cfg.optim.params.space_n_sample) == str:
-        space_n_sample = cfg.optim.params.space_n_sample
-        cfg.optim.params.space_n_sample = None if space_n_sample == 'None' else int(space_n_sample)
-        
+    if cfg['optim']['name'] == 'vns':
+        if type(cfg.optim.params.maximize) == str:
+            maximize_str = cfg.optim.params.maximize
+            cfg.optim.params.maximize = True if maximize_str == 'True' else False if maximize_str == 'False' else None
+        if type(cfg.optim.params.space_n_sample) == str:
+            space_n_sample = cfg.optim.params.space_n_sample
+            cfg.optim.params.space_n_sample = None if space_n_sample == 'None' else int(space_n_sample)
+            
     # load and process all data
     data_loader = get_data_loader(cfg)
     data = data_loader.load_all()
