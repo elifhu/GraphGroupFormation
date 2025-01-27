@@ -145,7 +145,8 @@ class GroupOptimizer:
 
     def _find_valid_group_sizes(self):
         combos = find_sum_combinations(self.min_group_size, self.max_group_size, self.N)
-        assert len(combos) > 0, 'Satisfying group sizes not possible, adjust min_group_size and max_group_size'
+        if len(combos) <= 0:
+            raise ValueError('Satisfying group sizes not possible, adjust min_group_size and max_group_size')
         return combos
 
 

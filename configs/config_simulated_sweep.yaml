@@ -1,0 +1,26 @@
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: affinty_${data.data_params.num_affinities}/size_${optim.params.min_group_size}/seed_${optim.params.seed}
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+    sampler:
+      _target_: optuna.samplers.GridSampler
+    storage: null
+    direction: maximize  # or maximize depending on your objective
+    study_name: GroupDiversity
+    n_jobs: 10  # adjust based on your available resources
+    n_trials: 240  # this should be total number of combinations
+    params:
+      optim.params.min_group_size: range(2, 24, 1)
+      data.data_params.num_affinities: range(2, 5, 1)
+
+defaults:
+  - _self_
+  - data: simulated
+  - optim: vns
+  - override hydra/sweeper: optuna
+  - override /hydra/sweeper/sampler: grid
+  - override hydra/launcher: joblib

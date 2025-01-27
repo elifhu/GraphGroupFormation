@@ -208,6 +208,7 @@ class SimulatedStudentLoader:
         for i in range(self.num_courses):
             df_dict[f'course_{i}'] = all_marks[:, i]
         self.df = pd.DataFrame(df_dict)
+        self.affinity_groups = np.array(affinity_groups)
     
     def _compute_eigenmaps(self):
         """Compute eigenmaps for both cohorts"""
@@ -236,5 +237,6 @@ class SimulatedStudentLoader:
             's': s,
             'df': self.df,
             'colors': self.colors,
-            'distances': cdist(self.q, self.q).flatten()
+            'distances': cdist(self.q, self.q).flatten(),
+            'affinity_groups': self.affinity_groups
         }

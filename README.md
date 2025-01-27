@@ -26,9 +26,16 @@ pip install -r requirements.txt
 - `multirun/`: Directory for parallel experiment runs
 
 ## Usage
-To re-run our experiments on simulated data:
+The code below runs our experiments on simulated data.
+
+Circle experiment: finding the optimal solution with and without balance constraint.
 ```bash
 python main.py --multirun --config-name config_circle_sweep
+```
+
+Simulated marks data: how diversity depends on group size and number of affinities.
+```bash
+python main.py --multirun --config-name config_simulated_sweep
 ```
 
 ## Custom Datasets

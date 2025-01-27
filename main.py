@@ -56,9 +56,11 @@ def get_data_loader(config):
     else:
         raise NotImplementedError('Data loader not implemented.')
 
-@hydra.main(version_base=None, config_path="configs", config_name="config_circle_sweep")
+@hydra.main(version_base=None, config_path="configs", config_name="config_simulated_sweep")
 def main(cfg: DictConfig) -> None:
     print(OmegaConf.to_yaml(cfg))
+    np.random.seed(cfg.optim.params.seed)
+
     hydra_cfg = HydraConfig.get()
     save_path = hydra_cfg.runtime.output_dir
 
@@ -69,18 +71,21 @@ def main(cfg: DictConfig) -> None:
         if type(cfg.optim.params.space_n_sample) == str:
             space_n_sample = cfg.optim.params.space_n_sample
             cfg.optim.params.space_n_sample = None if space_n_sample == 'None' else int(space_n_sample)
-            
+
     # load and process all data
     data_loader = get_data_loader(cfg)
     data = data_loader.load_all()
-    
+
     # optimize
     o, optimize_params = setup_optimizer(data, cfg)
-    best_groups, (best_solution, best_cost), trajectory_df = o.optimize(**optimize_params)
-    
-    # save results
-    print_grouping_stats(best_groups, best_cost, data, cfg, save_path)
-    save_run_data(data, best_groups, trajectory_df, cfg, save_path)
+    try:
+        best_groups, (best_solution, best_cost), trajectory_df = o.optimize(**optimize_params)
+        print_grouping_stats(best_groups, best_cost, data, cfg, save_path)
+        save_run_data(data, best_groups, trajectory_df, cfg, save_path)
+
+    except Exception as e:
+        print(f"Error during optimization: {e}")
+        best_cost = 0
     return best_cost
 
 if __name__ == "__main__":

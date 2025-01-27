@@ -1,7 +1,7 @@
 name: vns
 params:
-  min_group_size: 4
-  max_group_size: 4
+  min_group_size: 8
+  max_group_size: ${optim.params.min_group_size}
   balance: null
   seed: 1
   maximize: True
