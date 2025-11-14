@@ -1,7 +1,7 @@
-# Optimising Collaborative Learning: A Graph-Theoretic Approach to Student Group Formation
+# Fair and Skill-Diverse Student Group Formation: A Graph-Theoretic Approach
 
 ## About
-Code for *Optimising Collaborative Learning: A Graph-Theoretic Approach to Student Group Formation*.
+Code for *Fair and Skill-Diverse Student Group Formation: A Graph-Theoretic Approach*, IEEE Signal Processing Magazine.
 
 This repository contains implementations of group formation algorithms using Variable Neighborhood Search (VNS) and exact optimization methods. The code is structured to be flexible and adaptable for different datasets while maintaining a focus on educational group formation.
 
