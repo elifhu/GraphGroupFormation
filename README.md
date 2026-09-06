@@ -28,8 +28,8 @@ The pipeline has four stages, trained end to end where it matters.
    demographic balance lost in rounding.
 
 A variance decomposition guarantees that prescribing the within-group
-diversity level simultaneously fixes the between-group separation, so a
-single parameter controls both.
+diversity level simultaneously fixes the between-group separation, and a
+single parameter therefore controls both.
 
 ## Repository structure
 
