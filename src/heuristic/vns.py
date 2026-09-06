@@ -129,7 +129,7 @@ class GroupOptimizer:
         group_size_combos = self._find_valid_group_sizes()
         np.random.shuffle(group_size_combos)
 
-        # random inital solution which satisfies the group size constraints
+        # Random initial solution which satisfies the group size constraints
         group_sizes = group_size_combos[0]
         group_assignments = np.zeros((self.N, self.N)).astype(int)
         
@@ -221,7 +221,6 @@ class VNSGroupOptimizer(GroupOptimizer):
         for student, target_group in possible_moves:
             moves_checked += 1
             test_solution = self._apply_single_move(solution, (student, target_group))
-            # if self.check_feasibility(test_solution):
             valid_moves.append((student, target_group))
             valid_objs.append(self.evaluate_solution(test_solution))
         return valid_moves, valid_objs
@@ -250,7 +249,6 @@ class VNSGroupOptimizer(GroupOptimizer):
             test_solution[:, [i, j]] = test_solution[:, [j, i]]
             np.fill_diagonal(test_solution, 1)
 
-            # if self.check_feasibility(test_solution):
             valid_swaps.append((i, j))
             valid_objs.append(self.evaluate_solution(test_solution))
 

@@ -33,7 +33,7 @@ def plot_structure(ax, q, groups, title):
 
     unique_groups = pd.unique(groups)
 
-    # all groups same dark color -> no rainbow
+    # Draw every group in the same dark colour
     for g in unique_groups:
         mask = groups == g
         group_q = q[mask]

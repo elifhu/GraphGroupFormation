@@ -1,29 +1,13 @@
-# Fair Student Group Formation
+# Deep Graph Anticlustering for Fair Student Group Formation
 
-Code for forming skill-diverse, fair tutorial groups in the Department of
-Electrical and Electronic Engineering, Imperial College London. The
-repository contains two generations of the system.
+Code for forming skill-diverse, fair tutorial groups from assessment marks.
+A graph attention encoder is trained with a joint-embedding (VICReg)
+objective on a student correlation graph, a differentiable soft assignment
+is optimised jointly with the representation under a prescribed diversity
+level, group size bounds, and fairness penalties, and a greedy
+discretisation with a swap-based refinement returns the final groups.
 
-## 1. Deployed graph-theoretic pipeline (predecessor)
-
-Implementation of *Fair and Skill-Diverse Student Group Formation: A
-Graph-Theoretic Approach* (IEEE Signal Processing Magazine). Students are
-represented on a correlation graph, embedded with a Laplacian eigenmap, and
-allocated by a variable neighbourhood search under fairness and size
-constraints.
-
-- `main.py` — entry point (Hydra configs in `configs/`)
-- `src/heuristic/vns.py` — `VNSGroupOptimizer` and `ExactOptimizer`
-- `src/eigenmap/` — Laplacian eigenmap computation
-- `src/data/` — data loaders (real, circle, simulated)
-- `src/analysis/` — statistics for algorithm runs
-
-## 2. Deep graph anticlustering (IAAI-27 submission)
-
-Joint learning of the skill representation and the group assignment:
-a graph attention encoder trained with a joint-embedding (VICReg)
-objective, a differentiable soft assignment, and a greedy
-discretisation with a swap-based refinement.
+## Contents
 
 - `experiments/deep_anticlustering.py` — encoder, joint objective, training,
   discretisation, refinement
@@ -32,6 +16,8 @@ discretisation with a swap-based refinement.
 - `experiments/run_paper_experiments.py` — reproduces every number in the
   paper (`python run_paper_experiments.py <EIE|EEE|sweep>`)
 - `experiments/e2e_grouping.py` — end-to-end grouping on a cohort file
+- `main.py`, `src/`, `configs/` — supporting pipeline: data loaders,
+  Laplacian eigenmap, variable neighbourhood search, and run statistics
 
 ## Installation
 
