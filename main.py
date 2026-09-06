@@ -81,7 +81,7 @@ def main(cfg: DictConfig) -> None:
     try:
         best_groups, (best_solution, best_cost), trajectory_df = o.optimize(**optimize_params)
         print_grouping_stats(best_groups, best_cost, data, cfg, save_path)
-        save_run_data(data, best_groups, trajectory_df, cfg, save_path)
+        save_run_data(data, `best_groups`, trajectory_df, cfg, save_path)
 
     except Exception as e:
         print(f"Error during optimization: {e}")

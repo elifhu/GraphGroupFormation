@@ -1,0 +1,8 @@
+name: real
+data_params:
+  cohort: eie
+  f: Year1_EIE_only.xlsx
+  include_components: false
+save_path: processed_data/
+c_thresh: 0.5
+denom: 5

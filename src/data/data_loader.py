@@ -22,15 +22,104 @@ class RealStudentLoader:
         self._load_raw_data()
         self._compute_eigenmaps()
         return self.get_cohort_data()
-    
+
     def _load_raw_data(self):
-        """Load raw data from file"""
-        from src.data.imperial import load_data
-        self.df_eee, self.df_eie = load_data(
-            self.config['save_path'],
-            self.config['data_params']['fn_name'],
-            self.config['data_params']
-        )
+        """Load raw data from Excel"""
+        path = self.config['data_params']['f']
+        include_components = self.config['data_params'].get('include_components', False)
+
+        # First try normal header
+        df = pd.read_excel(path, header=0)
+        df.columns = [
+            ' '.join(
+                str(c).replace('\n', ' ').replace('_x000D_', ' ').strip().split()
+            )
+            for c in df.columns
+        ]
+
+        # If this looks like the original raw Year1 file with wrong header, retry with header=1
+        if ('CID' not in df.columns) and ('No.' not in df.columns):
+            df = pd.read_excel(path, header=1)
+            df.columns = [
+                ' '.join(
+                    str(c).replace('\n', ' ').replace('_x000D_', ' ').strip().split()
+                )
+                for c in df.columns
+            ]
+
+        print("COLUMNS:", df.columns.tolist())
+
+        # Use either No. or CID as student identifier
+        if 'No.' in df.columns:
+            id_col = 'No.'
+        elif 'CID' in df.columns:
+            id_col = 'CID'
+            df = df.rename(columns={'CID': 'No.'})
+            id_col = 'No.'
+        else:
+            raise KeyError(f"Could not find student ID column. Columns were: {df.columns.tolist()}")
+
+        df['No.'] = df['No.'].astype(str).str.strip()
+
+        base_cols = [
+            'No.',
+            'ELEC40002 Analysis & Design of Circuits',
+            'ELEC40003 Digital Electronic & Comp Arch',
+            'ELEC40004 Programming for Engineers',
+            'ELEC40006 Electronics Design Project 1',
+            'ELEC40009 Topics in Elec Engineering',
+            'ELEC40012 Mathematics 1',
+        ]
+
+        component_cols = [
+            'ELEC40002 exam',
+            'ELEC40002 MT Test 1',
+            'ELEC40002 Oral 1',
+            'ELEC40002 MT Test 2',
+            'ELEC40002 Oral 2',
+            'ELEC40003 exam',
+            'ELEC40003 MT Test 1',
+            'ELEC40003 Oral 1',
+            'ELEC40003 MT Test 2',
+            'ELEC40003 Oral 2',
+            'ELEC40004 MT Tests',
+            'ELEC40004 CW',
+            'ELEC40012A exam',
+            'ELEC40012A cw',
+            'ELEC40012B exam',
+            'ELEC40012B cw',
+        ]
+
+        # For the model, keep only ID + numeric mark columns
+        keep_cols = base_cols + (component_cols if include_components else [])
+        keep_cols = [c for c in keep_cols if c in df.columns]
+
+        print("KEEP_COLS:", keep_cols)
+
+        if 'No.' not in keep_cols:
+            raise ValueError("No usable student ID column found after filtering.")
+
+        mark_cols = [c for c in keep_cols if c != 'No.']
+
+        if len(mark_cols) == 0:
+            raise ValueError(f"No usable mark columns found. Available columns: {df.columns.tolist()}")
+
+        df = df[keep_cols].copy()
+
+        for c in mark_cols:
+            df[c] = pd.to_numeric(df[c], errors='coerce')
+
+        # Drop rows with no marks at all
+        df = df.dropna(subset=mark_cols, how='all').reset_index(drop=True)
+
+        # Fill remaining missing values with column means
+        df[mark_cols] = df[mark_cols].fillna(df[mark_cols].mean())
+
+        # Since each input file is already cohort-specific, we can store the same df
+        self.df_eee = df.copy()
+        self.df_eie = df.copy()
+
+
     
     def _compute_eigenmaps(self):
         """Compute eigenmaps for both cohorts"""

@@ -1,15 +1,20 @@
-# Data folders
-raw_data/
-processed_data/
-
-# Output folders
+# --- student data: never commit ---
+*.xlsx
+*.npy
+*.csv
 outputs/
+processed_data/
 multirun/
 
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
+# --- internal notes ---
+MEETING_BRIEF.md
+PAPER_OUTLINE.md
 
-# Jupyter notebook checkpoints
-.ipynb_checkpoints/
+# --- environment ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
